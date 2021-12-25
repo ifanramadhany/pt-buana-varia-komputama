@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { HomeScreen, CreateMemberScreen, OrganizationalChartScreen } from ".";
 
 export default function MainScreen() {

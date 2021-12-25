@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
   StyleSheet,
   View,
@@ -8,10 +8,43 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/Ionicons";
+import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { Input, SocialIcon } from "react-native-elements";
+import { useSelector, useDispatch } from "react-redux";
+import { createNewUser, setSuccessRegisterHandler } from "../store/actions/memberAction";
 
 export default function SignUpScreen({ navigation }) {
+  const dispatch = useDispatch();
+  const { users, successRegister } = useSelector((state) => state.memberState);
+
+  const [userInput, setUserInput] = useState({
+    email: '',
+    password: ''
+  })
+
+  const onChangeUserInput = (val, key) => {
+    const newObj = { ...userInput };
+    newObj[key] = val;
+    setUserInput(newObj);
+  };
+
+  const clearInputUser = () => {
+    setUserInput({
+      email: '',
+      password: ''
+    })
+  }
+
+  const createNewUserHandler = () => {
+    // console.log(userInput);
+    dispatch(createNewUser(userInput))
+    clearInputUser()
+    dispatch(setSuccessRegisterHandler(true))
+    setTimeout(() => {
+      dispatch(setSuccessRegisterHandler(false))
+    }, 2000);
+  }
+
   return (
     <View>
       <ImageBackground
@@ -35,13 +68,24 @@ export default function SignUpScreen({ navigation }) {
             </Text>
           </View>
           <View style={styles.userInput}>
+          <View style={styles.wrapperSuccessRegister}>
+              {
+                successRegister ? (
+                <View style={styles.successRegister}>
+                  <Text style={{color: 'green'}}>Email has been registered successfully!</Text>
+                </View>
+                ) : null
+              }
+            </View>
             <View style={styles.inputEmail}>
               <Input
                 inputContainerStyle={{ borderBottomWidth: 0 }}
                 inputStyle={{ fontSize: 15 }}
                 placeholder="Email"
+                value={userInput.email}
+                onChangeText={(val) => onChangeUserInput(val, "email")}
                 leftIcon={
-                  <Icon
+                  <Ionicons
                     name="mail-outline"
                     size={24}
                     color="#111827"
@@ -56,8 +100,10 @@ export default function SignUpScreen({ navigation }) {
                 inputStyle={{ fontSize: 15 }}
                 inputContainerStyle={{ borderBottomWidth: 0 }}
                 placeholder="Password"
+                value={userInput.password}
+                onChangeText={(val) => onChangeUserInput(val, "password")}
                 leftIcon={
-                  <Icon
+                  <Ionicons
                     name="lock-closed-outline"
                     size={24}
                     color="#111827"
@@ -69,13 +115,13 @@ export default function SignUpScreen({ navigation }) {
 
             <TouchableOpacity
               style={styles.signInBotton}
-              onPress={() => navigation.navigate("MainScreen")}
+              onPress={createNewUserHandler}
             >
               <Text style={{ color: "white", fontSize: 17 }}>Sign Up</Text>
             </TouchableOpacity>
             <View style={styles.oauth}>
               <View style={styles.oauthItem}>
-                <Icon name="logo-apple" size={35} color="#111827" />
+                <Ionicons name="logo-apple" size={35} color="#111827" />
               </View>
               <View style={styles.oauthItemCenter}>
                 <SocialIcon type="facebook" iconSize={25} />
@@ -105,6 +151,21 @@ export default function SignUpScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  successRegister: {
+    backgroundColor: '#fff',
+    height: 30,
+    width: '75%',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  wrapperSuccessRegister: {
+    // backgroundColor: 'red',
+    height: 50,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   oauthItemCenter: {
     display: "flex",
     alignItems: "center",
