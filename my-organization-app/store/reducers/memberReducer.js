@@ -1,7 +1,8 @@
-import { CREATE_USER, GET_MEMBER, GET_USER, SET_EMAIL_PASSWORD_WRONG, SET_ERROR, SET_LOADING, SET_SUCCESS_REGISTER } from "../keys";
+import { CREATE_USER, GET_MEMBER, GET_USER, SET_USER_INFO, SET_EMAIL_PASSWORD_WRONG, SET_ERROR, SET_LOADING, SET_SUCCESS_REGISTER } from "../keys";
 
 const initialState = {
   users: [],
+  userInfo: '',
   members: [], 
   isError: null,
   isLoading: null,
@@ -14,6 +15,8 @@ export default function reducer(state = initialState, action) {
   switch (type) {
     case GET_USER:
       return { ...state, users: payload };
+    case SET_USER_INFO:
+      return { ...state, userInfo: payload };
     case SET_ERROR:
       return { ...state, isError: payload };
     case SET_LOADING:

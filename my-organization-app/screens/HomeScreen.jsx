@@ -15,6 +15,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { Input, SocialIcon, SearchBar } from "react-native-elements";
 import { ItemMember } from "./components";
+import { useSelector, useDispatch } from "react-redux";
+import * as Google from 'expo-google-app-auth';
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -27,6 +29,8 @@ export default function HomeScreen({navigation}) {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
+  const { userInfo } = useSelector((state) => state.memberState);
 
   const members = [
     {
@@ -51,6 +55,17 @@ export default function HomeScreen({navigation}) {
     },
   ]
 
+  const logOutHandler = () => {
+    // console.log('google log out');
+    const config = {
+      iosClientId: `835876374944-5k8m3a5fv8hi2ecril8ompgf7oej5mi2.apps.googleusercontent.com`,
+      androidClientId: `835876374944-02psaf7kno7t29di5dp46aonum1lnhqe.apps.googleusercontent.com`,
+      scopes: ['profile', 'email']
+    }
+    Google.logOutAsync(config)
+    navigation.navigate("SignInScreen")
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View
@@ -63,7 +78,7 @@ export default function HomeScreen({navigation}) {
           <View>
             <Text style={styles.myOrgz}>myOrgz</Text>
           </View>
-          <View style={{ marginRight: 15 }}>
+          <TouchableOpacity style={{ marginRight: 15 }} onPress={logOutHandler}>
             <Image
               style={styles.imgUser}
               resizeMode="cover"
@@ -71,12 +86,12 @@ export default function HomeScreen({navigation}) {
                 uri: "https://images.unsplash.com/photo-1531256456869-ce942a665e80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80",
               }}
             ></Image>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.hiUser}>
           <View>
-            <Text style={{ fontSize: 16, marginLeft: 18 }}>Hi, Andrea</Text>
+            <Text style={{ fontSize: 16, marginLeft: 18 }}>Hi, {userInfo}</Text>
           </View>
           <View style={{ marginHorizontal: 18 }}>
             <Text style={{ fontSize: 29, fontWeight: "bold" }}>
@@ -84,10 +99,9 @@ export default function HomeScreen({navigation}) {
             </Text>
           </View>
           <View>
-            <TouchableOpacity
+            <View
               activeOpacity={0.7}
               style={styles.inputSearch}
-              onPress={() => navigation.navigate("SignIn")}
             >
               <Input
                 disabled={true}
@@ -114,7 +128,7 @@ export default function HomeScreen({navigation}) {
                   </TouchableOpacity>
                 }
               />
-            </TouchableOpacity>
+            </View>
           </View>
         </View>
 

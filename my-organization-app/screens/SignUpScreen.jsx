@@ -11,7 +11,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { Input, SocialIcon } from "react-native-elements";
 import { useSelector, useDispatch } from "react-redux";
-import { createNewUser, setSuccessRegisterHandler } from "../store/actions/memberAction";
+import { createNewUser, setSuccessRegisterHandler, setUserInfo } from "../store/actions/memberAction";
+import * as Google from 'expo-google-app-auth';
 
 export default function SignUpScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -43,6 +44,33 @@ export default function SignUpScreen({ navigation }) {
     setTimeout(() => {
       dispatch(setSuccessRegisterHandler(false))
     }, 2000);
+  }
+
+  // GoogleSignin.configure({
+  //   iosClientId: '835876374944-5k8m3a5fv8hi2ecril8ompgf7oej5mi2.apps.googleusercontent.com'
+  // })
+
+  const googleSignIn = () => {
+    // console.log('google log in');
+    const config = {
+      iosClientId: `835876374944-5k8m3a5fv8hi2ecril8ompgf7oej5mi2.apps.googleusercontent.com`,
+      androidClientId: `835876374944-02psaf7kno7t29di5dp46aonum1lnhqe.apps.googleusercontent.com`,
+      scopes: ['profile', 'email']
+    }
+
+    Google
+      .logInAsync(config)
+      .then((result) => {
+        const {type, user} = result
+        if(type === 'success') {
+          const {email, name, photoUrl} = user
+          dispatch(setUserInfo(email))
+          navigation.navigate("MainScreen")
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   return (
@@ -126,14 +154,14 @@ export default function SignUpScreen({ navigation }) {
               <View style={styles.oauthItemCenter}>
                 <SocialIcon type="facebook" iconSize={25} />
               </View>
-              <View style={styles.oauthItem}>
+              <TouchableOpacity style={styles.oauthItem} onPress={googleSignIn}>
                 <Image
                   style={{ width: 55, height: 55 }}
                   source={{
                     uri: "https://www.designbust.com/download/1016/png/google_logo_png_transparent512.png",
                   }}
                 ></Image>
-              </View>
+              </TouchableOpacity>
             </View>
             <View style={styles.signUphere}>
               <Text style={{ marginRight: 8, color: "white" }}>

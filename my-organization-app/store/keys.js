@@ -1,4 +1,5 @@
 export const GET_USER = 'user/getUser' // named export
+export const SET_USER_INFO = 'user/setUserInfo' // named export
 export const CREATE_USER = 'user/createUser' // named export
 export const SET_LOADING = 'member/setLoading' // named export
 export const SET_ERROR = 'member/setError' // named export

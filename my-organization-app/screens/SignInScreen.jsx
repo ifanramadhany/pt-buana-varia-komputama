@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { Input } from "react-native-elements";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUsers, setEmailPasswordWrongHandler } from "../store/actions/memberAction";
+import { fetchUsers, setEmailPasswordWrongHandler, setUserInfo } from "../store/actions/memberAction";
 
 export default function SignInScreen({navigation}) {
   const dispatch = useDispatch();
@@ -36,10 +36,14 @@ export default function SignInScreen({navigation}) {
     const found = users.some(el => el.email === userInput.email && el.password === userInput.password);
     if (found) {
       navigation.navigate("MainScreen")
+      dispatch(setUserInfo(userInput.email))
       dispatch(setEmailPasswordWrongHandler(false))
       clearInputUser()
     } else {
       dispatch(setEmailPasswordWrongHandler(true))
+      setTimeout(() => {
+        dispatch(setEmailPasswordWrongHandler(false))
+      }, 2000);
     }
   }
 
