@@ -6,6 +6,7 @@ import {
   SET_EMAIL_PASSWORD_WRONG,
   CREATE_USER,
   SET_SUCCESS_REGISTER,
+  SET_USER_INFO,
 } from "../keys";
 
 export function getUsers(payload) {
@@ -53,6 +54,13 @@ export function setSuccessRegister(payload) {
 export function createUserToReducer(payload) {
   return {
     type: CREATE_USER,
+    payload,
+  };
+}
+
+export function setUserInfo(payload) {
+  return {
+    type: SET_USER_INFO,
     payload,
   };
 }
