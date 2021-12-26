@@ -1,4 +1,4 @@
-import { CREATE_USER, GET_MEMBER, GET_USER, SET_USER_INFO, SET_EMAIL_PASSWORD_WRONG, SET_ERROR, SET_LOADING, SET_SUCCESS_REGISTER } from "../keys";
+import { CREATE_USER, CREATE_MEMBER, GET_MEMBER, GET_USER, SET_USER_INFO, SET_EMAIL_PASSWORD_WRONG, SET_ERROR, SET_LOADING, SET_SUCCESS_REGISTER, SET_SUCCESS_CREATE_MEMBER } from "../keys";
 
 const initialState = {
   users: [],
@@ -8,6 +8,7 @@ const initialState = {
   isLoading: null,
   wrongEmailPassword: false,
   successRegister: false,
+  successCreateMember: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -27,10 +28,16 @@ export default function reducer(state = initialState, action) {
       return { ...state, wrongEmailPassword: payload};
     case SET_SUCCESS_REGISTER:
       return { ...state, successRegister: payload};
+    case SET_SUCCESS_CREATE_MEMBER:
+      return { ...state, successCreateMember: payload};
     case CREATE_USER:
       let newUsers = state.users.map(el => el);
       newUsers.unshift(payload);
       return { ...state, users: newUsers };
+    case CREATE_MEMBER:
+      let newMembers = state.members.map(el => el);
+      newMembers.unshift(payload);
+      return { ...state, members: newMembers };
     default:
       return state;
   }
