@@ -16,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { Input, SocialIcon, SearchBar } from "react-native-elements";
 import { useSelector, useDispatch } from "react-redux";
+import ItemChartMember from "./components/ItemChartMember";
 
 export default function OrganizationalChartScreen() {
   const { members, successCreateMember } = useSelector(
@@ -100,11 +101,9 @@ export default function OrganizationalChartScreen() {
         <View style={styles.wrapperThreeMembers}>
           {/* department HR */}
           <View style={styles.containerMembers}>
-            {membersChro.map((item) => {
+          {membersChro.map((item) => {
               return (
-                <View key={item.id} style={styles.boxNameMember}>
-                  <Text numberOfLines={1}>{item.name}</Text>
-                </View>
+                <ItemChartMember key={item.id} item={item}></ItemChartMember>
               );
             })}
           </View>
@@ -112,9 +111,7 @@ export default function OrganizationalChartScreen() {
           <View style={styles.containerMembers}>
           {membersCto.map((item) => {
               return (
-                <View key={item.id} style={styles.boxNameMember}>
-                  <Text numberOfLines={1}>{item.name}</Text>
-                </View>
+                <ItemChartMember key={item.id} item={item}></ItemChartMember>
               );
             })}
           </View>
@@ -122,9 +119,7 @@ export default function OrganizationalChartScreen() {
           <View style={styles.containerMembers}>
           {membersCfo.map((item) => {
               return (
-                <View key={item.id} style={styles.boxNameMember}>
-                  <Text numberOfLines={1}>{item.name}</Text>
-                </View>
+                <ItemChartMember key={item.id} item={item}></ItemChartMember>
               );
             })}
           </View>
@@ -140,16 +135,6 @@ export default function OrganizationalChartScreen() {
 }
 
 const styles = StyleSheet.create({
-  boxNameMember: {
-    height: 25,
-    width: "100%",
-    borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    marginVertical: 2,
-    backgroundColor: "#0ACF83",
-  },
   wrapperThreeMembers: {
     // height: 30,
     // width: "100%",
