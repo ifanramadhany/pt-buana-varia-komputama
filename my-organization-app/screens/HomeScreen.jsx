@@ -10,23 +10,26 @@ import {
   Pressable,
   TouchableOpacity,
   FlatList,
-  StatusBar
+  StatusBar,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { Input, SocialIcon, SearchBar } from "react-native-elements";
-import { ItemMember } from "./components";
+import { ItemMember, ModalMenuUser } from "./components";
 import { useSelector, useDispatch } from "react-redux";
-import * as Google from 'expo-google-app-auth';
+import * as Google from "expo-google-app-auth";
 import { fetchMembers } from "../store/actions/memberAction";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
+
+  const [modalMenuUser, setModalMenuUser] = useState(false);
+  const modalMenuUserClose = () => setModalMenuUser(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -44,111 +47,120 @@ export default function HomeScreen({navigation}) {
     const config = {
       iosClientId: `835876374944-5k8m3a5fv8hi2ecril8ompgf7oej5mi2.apps.googleusercontent.com`,
       androidClientId: `835876374944-02psaf7kno7t29di5dp46aonum1lnhqe.apps.googleusercontent.com`,
-      scopes: ['profile', 'email']
-    }
-    Google.logOutAsync(config)
-    navigation.navigate("SignInScreen")
-  }
+      scopes: ["profile", "email"],
+    };
+    Google.logOutAsync(config);
+    navigation.navigate("SignInScreen");
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View
-        style={styles.scrollViewContent}
-      >
-        <View style={styles.logo}>
-          <View style={{ marginHorizontal: 15 }}>
-            <Ionicons name="menu-outline" size={30} color="#111827" />
-          </View>
-          <View>
-            <Text style={styles.myOrgz}>myOrgz</Text>
-          </View>
-          <TouchableOpacity style={{ marginRight: 15 }} onPress={logOutHandler}>
-            <Image
-              style={styles.imgUser}
-              resizeMode="cover"
-              source={{
-                uri: "https://images.unsplash.com/photo-1531256456869-ce942a665e80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80",
-              }}
-            ></Image>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.hiUser}>
-          <View>
-            <Text style={{ fontSize: 16, marginLeft: 18 }}>Hi, {userInfo}</Text>
-          </View>
-          <View style={{ marginHorizontal: 18 }}>
-            <Text style={{ fontSize: 29, fontWeight: "bold" }}>
-              What are you looking for today?
-            </Text>
-          </View>
-          <View>
-            <View
-              activeOpacity={0.7}
-              style={styles.inputSearch}
+    <>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.scrollViewContent}>
+          <View style={styles.logo}>
+            <TouchableOpacity style={{ marginHorizontal: 17 }} onPress={() => setModalMenuUser(true)}>
+              <FontAwesome name="bars" size={32} color="#4b5563" />
+            </TouchableOpacity>
+            <View>
+              <Text style={styles.myOrgz}>myOrgz</Text>
+            </View>
+            <TouchableOpacity
+              style={{ marginRight: 17 }}
             >
-              <Input
-                disabled={true}
-                inputContainerStyle={{ borderBottomWidth: 0 }}
-                inputStyle={{ fontSize: 15 }}
-                placeholder="Search member"
-                placeholderTextColor="#9CA3AF"
-                leftIcon={
-                  <FontAwesome
-                    name="search"
-                    size={24}
-                    color="#9CA3AF"
-                    style={{ marginRight: 10 }}
-                  />
-                }
-                rightIcon={
-                  <TouchableOpacity>
+              <Image
+                style={styles.imgUser}
+                resizeMode="cover"
+                source={{
+                  uri: "https://images.unsplash.com/photo-1531256456869-ce942a665e80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80",
+                }}
+              ></Image>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.hiUser}>
+            <View>
+              <Text style={{ fontSize: 16, marginLeft: 18 }}>
+                Hi, {userInfo}
+              </Text>
+            </View>
+            <View style={{ marginHorizontal: 18 }}>
+              <Text style={{ fontSize: 29, fontWeight: "bold" }}>
+                What are you looking for today?
+              </Text>
+            </View>
+            <View>
+              <View activeOpacity={0.7} style={styles.inputSearch}>
+                <Input
+                  disabled={true}
+                  inputContainerStyle={{ borderBottomWidth: 0 }}
+                  inputStyle={{ fontSize: 15 }}
+                  placeholder="Search member"
+                  placeholderTextColor="#9CA3AF"
+                  leftIcon={
                     <FontAwesome
-                      name="times"
+                      name="search"
                       size={24}
                       color="#9CA3AF"
                       style={{ marginRight: 10 }}
                     />
-                  </TouchableOpacity>
-                }
-              />
+                  }
+                  rightIcon={
+                    <TouchableOpacity>
+                      <FontAwesome
+                        name="times"
+                        size={24}
+                        color="#9CA3AF"
+                        style={{ marginRight: 10 }}
+                      />
+                    </TouchableOpacity>
+                  }
+                />
+              </View>
             </View>
           </View>
-        </View>
 
-        <View style={styles.containerTable}>
-          <View style={styles.wrapperKeyTable}>
-            <View style={styles.keyId}>
-              <Text style={{ fontWeight: "bold", color: '#fff'}}>ID</Text>
+          <View style={styles.containerTable}>
+            <View style={styles.wrapperKeyTable}>
+              <View style={styles.keyId}>
+                <Text style={{ fontWeight: "bold", color: "#fff" }}>ID</Text>
+              </View>
+              <View style={styles.keyName}>
+                <Text style={{ fontWeight: "bold", color: "#fff" }}>Name</Text>
+              </View>
+              <View style={styles.keyPosition}>
+                <Text style={{ fontWeight: "bold", color: "#fff" }}>
+                  Position
+                </Text>
+              </View>
+              <View style={styles.keyAction}>
+                <Text style={{ fontWeight: "bold", color: "#fff" }}>
+                  Action
+                </Text>
+              </View>
             </View>
-            <View style={styles.keyName}>
-              <Text style={{ fontWeight: "bold", color: '#fff'}}>Name</Text>
-            </View>
-            <View style={styles.keyPosition}>
-              <Text style={{ fontWeight: "bold", color: '#fff'}}>Position</Text>
-            </View>
-            <View style={styles.keyAction}>
-              <Text style={{ fontWeight: "bold", color: '#fff'}}>Action</Text>
-            </View>
+            {/* Looping Item here  */}
+            <FlatList
+              style={styles.wrapperItemTable}
+              data={members}
+              renderItem={({ item, index }) => (
+                <ItemMember item={item} navigation={navigation}></ItemMember>
+              )}
+              keyExtractor={(item, index) => item.id}
+            ></FlatList>
           </View>
-          {/* Looping Item here  */}
-          <FlatList 
-          
-          style={styles.wrapperItemTable}
-          data={members}
-          renderItem={({ item, index }) => (
-            <ItemMember
-              item={item}
-              navigation={navigation}
-            ></ItemMember>
-          )}
-          keyExtractor={(item, index) => item.id}
-          >
-          </FlatList>
         </View>
-      </View>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-    </SafeAreaView>
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
+      </SafeAreaView>
+      <ModalMenuUser
+        modalMenuUser={modalMenuUser}
+        modalMenuUserClose={modalMenuUserClose}
+        logOutHandler={logOutHandler}
+      ></ModalMenuUser>
+    </>
   );
 }
 
@@ -195,7 +207,7 @@ const styles = StyleSheet.create({
   wrapperItemTable: {
     // backgroundColor: "green",
     marginHorizontal: 13,
-    marginBottom: 1 
+    marginBottom: 1,
   },
   keyAction: {
     // backgroundColor: "red",
