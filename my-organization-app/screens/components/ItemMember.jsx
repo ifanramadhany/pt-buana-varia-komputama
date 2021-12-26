@@ -1,31 +1,45 @@
-import React from "react";
+import React, {useState} from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { FontAwesome, Ionicons } from "react-native-vector-icons";
+import { ModalDetail } from ".";
 
-export default function ItemMember({ item }) {
+export default function ItemMember({ item, navigation }) {
+  const [modalDetail, setModalDetail] = useState(false);
+  const modalDetailClose = () => setModalDetail(false);
+
   return (
-    <View style={styles.itemTable}>
-      <View style={styles.itemId}>
-        <Text numberOfLines={1} style={{ fontWeight: "bold" }}>
-          {item.id}
-        </Text>
+    <>
+      <View style={styles.itemTable}>
+        <View style={styles.itemId}>
+          <Text numberOfLines={1} style={{ fontWeight: "bold" }}>
+            {item.id}
+          </Text>
+        </View>
+        <View style={styles.itemName}>
+          <Text numberOfLines={1} style={{ fontWeight: "bold" }}>
+            {item.name}
+          </Text>
+        </View>
+        <View style={styles.itemPosition}>
+          <Text numberOfLines={1} style={{ fontWeight: "bold" }}>
+            {item.position}
+          </Text>
+        </View>
+        <View style={styles.itemAction}>
+          <TouchableOpacity style={styles.wrapperIcon} onPress={() => setModalDetail(true)}>
+            <Ionicons name="eye" size={25} color="#0ACF83" ></Ionicons>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.itemName}>
-        <Text numberOfLines={1} style={{ fontWeight: "bold" }}>
-          {item.name}
-        </Text>
-      </View>
-      <View style={styles.itemPosition}>
-        <Text numberOfLines={1} style={{ fontWeight: "bold" }}>
-          {item.position}
-        </Text>
-      </View>
-      <View style={styles.itemAction}>
-        <TouchableOpacity style={styles.wrapperIcon}>
-          <Ionicons name="eye" size={25} color="#0ACF83" ></Ionicons>
-        </TouchableOpacity>
-      </View>
-    </View>
+
+      {/* modal detail  */}
+      <ModalDetail
+        item={item}
+        modalDetail={modalDetail}
+        modalDetailClose={modalDetailClose}
+        navigation={navigation}
+      ></ModalDetail>
+    </>
   );
 }
 

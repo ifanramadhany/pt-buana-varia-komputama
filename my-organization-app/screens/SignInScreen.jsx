@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { StyleSheet, View, Text, ImageBackground, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { Input } from "react-native-elements";
@@ -82,6 +82,7 @@ export default function SignInScreen({navigation}) {
             </View>
             <View style={styles.inputEmail}>
               <Input
+                selectionColor={"#0ACF83"}
                 inputContainerStyle={{borderBottomWidth:0}}
                 inputStyle={{fontSize: 15}}
                 placeholder="Email"
@@ -92,6 +93,7 @@ export default function SignInScreen({navigation}) {
             </View>
             <View style={styles.inputPassword}>
               <Input
+                selectionColor={"#0ACF83"}
                 secureTextEntry={true}
                 inputStyle={{fontSize: 15}}
                 inputContainerStyle={{borderBottomWidth:0}}
@@ -118,6 +120,7 @@ export default function SignInScreen({navigation}) {
           </View>
         </SafeAreaView>
       </ImageBackground>
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
     </View>
   );
 }

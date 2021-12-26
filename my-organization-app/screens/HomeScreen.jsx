@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -9,7 +9,8 @@ import {
   TouchableHighlight,
   Pressable,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  StatusBar
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons } from "react-native-vector-icons";
@@ -17,12 +18,14 @@ import { Input, SocialIcon, SearchBar } from "react-native-elements";
 import { ItemMember } from "./components";
 import { useSelector, useDispatch } from "react-redux";
 import * as Google from 'expo-google-app-auth';
+import { fetchMembers } from "../store/actions/memberAction";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
 export default function HomeScreen({navigation}) {
+  const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
@@ -30,30 +33,11 @@ export default function HomeScreen({navigation}) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const { userInfo } = useSelector((state) => state.memberState);
+  const { userInfo, members } = useSelector((state) => state.memberState);
 
-  const members = [
-    {
-      id: 1,
-      name: "Daniel Dewa",
-      position: "Staff IT",
-    },
-    {
-      id: 2,
-      name: "Yanti Permata",
-      position: "Staff Finance",
-    },
-    {
-      id: 3,
-      name: "Christian",
-      position: "Staff HR",
-    },
-    {
-      id: 4,
-      name: "Samuel Utama",
-      position: "Staff IT",
-    },
-  ]
+  useEffect(() => {
+    dispatch(fetchMembers());
+  }, []);
 
   const logOutHandler = () => {
     // console.log('google log out');
@@ -163,6 +147,7 @@ export default function HomeScreen({navigation}) {
           </FlatList>
         </View>
       </View>
+      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
     </SafeAreaView>
   );
 }

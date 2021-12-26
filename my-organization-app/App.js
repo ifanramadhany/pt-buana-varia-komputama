@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SignInScreen, SignUpScreen, MainScreen } from "./screens";
+import { SignInScreen, SignUpScreen, MainScreen, HomeScreen } from "./screens";
 import { Provider } from "react-redux";
 import store from "./store";
 
@@ -15,6 +15,7 @@ export default function App() {
           <Stack.Screen name="SignInScreen" component={SignInScreen} />
           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
           <Stack.Screen name="MainScreen" component={MainScreen} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
