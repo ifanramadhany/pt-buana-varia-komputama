@@ -2,6 +2,8 @@
 
 > **Berikut adalah beberapa Screenshots dan sedikit penjelasan dari myorgz app**
 
+> **INFORMASI: Codingan Lengkap ada di Branch depelopment**
+
 Pada myorgz app, ada 5 screen yaitu:
 
 `Sign In` dimana user login melalui screen ini, jika user tidak ada akan ada notif email/password is wrong. 
